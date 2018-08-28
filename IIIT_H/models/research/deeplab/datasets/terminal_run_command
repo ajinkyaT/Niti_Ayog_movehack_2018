@@ -1,0 +1,182 @@
+#Important links
+1)http://hellodfan.com/2018/07/06/DeepLabv3-with-own-dataset/
+2)https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md
+3)https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/cityscapes.md
+4)https://github.com/mcordts/cityscapesScripts
+5)https://github.com/tensorflow/models/tree/master/research/deeplab
+
+#Things to do
+#If you get 'Failed to find all Cityscapes modules'while running createTrainIdLabelImgs.py,
+# You can get it to work on Python3 by commenting out the line
+`print type(obj).name` from cityscapeScripts/helpers/annotation.py line 238
+#Create variable(in this case CITYSCAPES_DATASET_INDIA) to point the cityscapes_india directory in the bash.bashrc file in home/etc/ and then run source bash.bashrc from terminal. Don't forget to restart the computer.
+#Edit youy labels and corresponding ID in helpers/labels.py
+#Change "ids" to "color" to produce color map from different classes
+#############################################################################################################################
+# Run from terminal 
+# From tensorflow/models/research/ 
+#For training deeplab model on cityscapes_india dataset. Given correct initial checkpoint      
+python deeplab/train.py \
+    --logtostderr \
+    --training_number_of_steps=120000 \
+    --train_split="train" \
+    --model_variant="xception_65" \
+    --atrous_rates=6 \
+    --atrous_rates=12 \
+    --atrous_rates=18 \
+    --output_stride=16 \
+    --decoder_output_stride=4 \
+    --train_crop_size=513 \
+    --train_crop_size=513 \
+    --train_batch_size=2 \
+    --dataset="cityscapes_india" \
+    --initialize_last_layer=False\
+    --last_layers_contain_logits_only=True\
+    --tf_initial_checkpoint='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/exp/train_on_train_set/train/model.ckpt' \
+    --train_logdir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/exp/train_on_train_set/train' \
+    --dataset_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/tfrecord'
+
+python deeplab/eval.py \
+    --logtostderr \
+    --eval_split="val" \
+    --model_variant="xception_65" \
+    --atrous_rates=12 \
+    --atrous_rates=24 \
+    --atrous_rates=36 \
+    --output_stride=8 \
+    --decoder_output_stride=4 \
+    --eval_crop_size=1080 \
+    --eval_crop_size=2048 \
+    --dataset="cityscapes_india" \
+    --checkpoint_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/exp/train_on_train_set/train' \
+    --eval_logdir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/exp/train_on_train_set/eval' \
+    --dataset_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/tfrecord'
+
+python deeplab/vis.py \
+    --logtostderr \
+    --vis_split="val" \
+    --model_variant="xception_65" \
+    --atrous_rates=6 \
+    --atrous_rates=12 \
+    --atrous_rates=18 \
+    --output_stride=16 \
+    --decoder_output_stride=4 \
+    --vis_crop_size=1080 \
+    --vis_crop_size=2048 \
+    --max_number_of_evaluations=1 \
+    --dataset="cityscapes_india" \
+    --colormap_type="cityscapes_india" \
+    --checkpoint_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/exp/train_on_train_set/train' \
+    --vis_logdir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/exp/train_on_train_set/vis'\
+    --dataset_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/tfrecord'
+
+#where ${PATH_TO_INITIAL_CHECKPOINT} is the path to the initial checkpoint (usually an ImageNet pretrained checkpoint), ${PATH_TO_TRAIN_DIR} is the directory in which training checkpoints and events will #be written to, and ${PATH_TO_DATASET} is the directory in which the Cityscapes dataset resides.
+
+####################################################################################################################################
+#For visualization of trained deeplab model on cityscapes_india validation dataset
+# Run from terminal 
+# From tensorflow/models/research/    
+python deeplab/vis.py \
+    --logtostderr \
+    --vis_split="val" \
+    --model_variant="xception_65" \
+    --atrous_rates=6 \
+    --atrous_rates=12 \
+    --atrous_rates=18 \
+    --output_stride=16 \
+    --decoder_output_stride=4 \
+    --vis_crop_size=513 \
+    --vis_crop_size=513 \
+    --max_number_of_evaluations=1 \
+    --dataset="cityscapes_india" \
+    --colormap_type="cityscapes" \
+    --checkpoint_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/exp/train_on_train_set/train' \
+    --vis_logdir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/exp/train_on_train_set/eval'\
+    --dataset_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/tfrecord'
+
+##For evaluating results of cityscapes trained model on cityscapes dataset
+# Run from terminal 
+# From tensorflow/models/research/
+python deeplab/eval.py \
+    --logtostderr \
+    --eval_split="val" \
+    --model_variant="xception_65" \
+    --atrous_rates=6 \
+    --atrous_rates=12 \
+    --atrous_rates=18 \
+    --output_stride=16 \
+    --decoder_output_stride=4 \
+    --eval_crop_size=1024 \
+    --eval_crop_size=2048 \
+    --dataset="cityscapes" \
+    --checkpoint_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes/exp/train_on_train_set/train' \
+    --eval_logdir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes/exp/train_on_train_set/eval' \
+    --dataset_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes/tfrecord'
+
+#For visualizing results of cityscapes trained model on cityscapes dataset
+# Run from terminal 
+# From tensorflow/models/research/
+python deeplab/vis.py \
+    --logtostderr \
+    --vis_split="val" \
+    --model_variant="xception_65" \
+    --atrous_rates=6 \
+    --atrous_rates=12 \
+    --atrous_rates=18 \
+    --output_stride=16 \
+    --decoder_output_stride=4 \
+    --vis_crop_size=1024 \
+    --vis_crop_size=2048 \
+    --dataset="cityscapes" \
+    --colormap_type="cityscapes" \
+    --checkpoint_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes/exp/train_on_train_set/train' \
+    --vis_logdir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes/exp/train_on_train_set/vis' \
+    --dataset_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes/tfrecord'
+
+####################################################
+#For camvid dataset
+# From tensorflow/models/research/deeplab/datasets
+python ./build_voc2012_data.py \
+  --image_folder="/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/camvid/image" \
+  --semantic_segmentation_folder="/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/camvid/mask" \
+  --list_folder="/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/camvid/index" \
+  --image_format="png" \
+  --output_dir="/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/camvid/tfrecord"
+
+#For camvid dataset training 
+python deeplab/train.py \
+    --logtostderr \
+    --training_number_of_steps=300 \
+    --train_split="train" \
+    --model_variant="xception_65" \
+    --atrous_rates=6 \
+    --atrous_rates=12 \
+    --atrous_rates=18 \
+    --output_stride=16 \
+    --decoder_output_stride=4 \
+    --train_crop_size=513 \
+    --train_crop_size=513 \
+    --train_batch_size=2 \
+    --dataset="camvid" \
+    --tf_initial_checkpoint='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/cityscapes_india/deeplabv3_cityscapes_train/model.ckpt' \
+    --train_logdir=/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/camvid/exp/train_on_train_set/train \
+    --dataset_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/camvid/tfrecord'
+
+# From tensorflow/models/research/
+python deeplab/vis.py \
+    --logtostderr \
+    --vis_split="val" \
+    --model_variant="xception_65" \
+    --atrous_rates=6 \
+    --atrous_rates=12 \
+    --atrous_rates=18 \
+    --output_stride=16 \
+    --decoder_output_stride=4 \
+    --vis_crop_size=360 \
+    --vis_crop_size=480 \
+    --dataset="camvid" \
+    --colormap_type="pascal" \
+    --checkpoint_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/camvid/exp/train_on_train_set/train' \
+    --vis_logdir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/camvid/exp/train_on_train_set/vis' \
+    --dataset_dir='/home/pradeepr/Desktop/GOI_challenge/Niti_Ayog/AI_for_road_5/Object_detection/tensorflow_master/models/research/deeplab/datasets/camvid/tfrecord'
+

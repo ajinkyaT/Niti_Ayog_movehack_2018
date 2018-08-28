@@ -79,7 +79,7 @@ for image_id in tqdm(test_ids):
         mask_to_draw[predicted_mask[i]>=threshold] = color[i+1]
         #mask_to_draw[predicted_mask[i]<threshold] = (255,188,64)
         
-    image_mask = cv2.addWeighted(image_3, 0.8, mask_to_draw, 0.2, 0)
+    image_mask = cv2.addWeighted(image_3, 0.6, mask_to_draw, 0.4, 0)
     imwrite('../test_mask/{}_mask.png'.format(image_id), mask_to_draw)
     imwrite('../test_mask/{}image.png'.format(image_id), image_3)
     imwrite('../test_mask/{}_mask_image.png'.format(image_id), image_mask)
